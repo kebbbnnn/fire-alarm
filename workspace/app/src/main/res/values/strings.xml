@@ -3,4 +3,8 @@
 
   <string name="hello_world">Hello world!</string>
   <string name="action_settings">Settings</string>
+  <string name="title_activity_send_alarm">SendAlarmActivity</string>
+  <!-- Parse credentials-->
+  <string name="applicationId">f5tsasRPBM0hMIjSCcYk9nx1IMVfmeixO2Py7gec</string>
+  <string name="clientId">FVXeaKIGk0IQChV4F1mWFoK50asQJjvfGux8AsNO</string>
 </resources>

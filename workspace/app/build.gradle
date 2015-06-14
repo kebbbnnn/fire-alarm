@@ -20,6 +20,11 @@ android {
 }
 
 dependencies {
+  compile files("libs/bolts-android-1.2.0.jar");
+  compile files("libs/bolts-android-1.2.0-javadoc.jar");
+  compile files("libs/Parse-1.9.2.jar")
+  compile files("libs/ParseCrashReporting-1.9.2.jar")
+
   compile 'com.android.support:appcompat-v7:22.0.0'
   compile 'com.google.android.gms:play-services:7.5.0'
   compile 'pl.charmas.android:android-reactive-location:0.6@aar'
@@ -27,4 +32,5 @@ dependencies {
 
   //RxAndroid or NotRxAndroid is not required by library
   compile 'io.reactivex:rxandroid:0.24.0'
+  compile 'de.greenrobot:eventbus:2.4.0'
 }
