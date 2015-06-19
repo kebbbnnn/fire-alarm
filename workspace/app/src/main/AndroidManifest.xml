@@ -39,6 +39,10 @@
             android:name=".activities.SendAlarmActivity"
             android:label="@string/title_activity_send_alarm" >
         </activity>
+        <activity
+            android:name=".activities.MonitorActivity"
+            android:label="@string/title_activity_monitor" >
+        </activity>
     </application>
 
 </manifest>

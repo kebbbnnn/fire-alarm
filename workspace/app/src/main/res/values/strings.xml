@@ -7,4 +7,5 @@
   <!-- Parse credentials-->
   <string name="applicationId">f5tsasRPBM0hMIjSCcYk9nx1IMVfmeixO2Py7gec</string>
   <string name="clientId">FVXeaKIGk0IQChV4F1mWFoK50asQJjvfGux8AsNO</string>
+  <string name="title_activity_monitor">MonitorActivity</string>
 </resources>
