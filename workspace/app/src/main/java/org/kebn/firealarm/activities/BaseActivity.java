@@ -6,15 +6,19 @@ import android.support.v7.app.ActionBarActivity;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
+import com.parse.SendCallback;
 
 import org.kebn.firealarm.FireAlarmApp;
 import org.kebn.firealarm.events.AlarmSentEvent;
+import org.kebn.firealarm.events.InvokePushNotifEvent;
 import org.kebn.firealarm.events.RequestActiveAlarmEvent;
 import org.kebn.firealarm.events.SendAlarmEvent;
 import org.kebn.firealarm.events.UpdateMapMarkers;
 import org.kebn.firealarm.utils.AddressUtil;
+import org.kebn.firealarm.utils.LogUtil;
 
 import java.util.List;
 
@@ -62,6 +66,7 @@ public class BaseActivity extends ActionBarActivity {
       @Override
       public void done(ParseException e) {
         EventBus.getDefault().post(new AlarmSentEvent(e));
+        EventBus.getDefault().post(new InvokePushNotifEvent(e));
       }
     });
   }
@@ -80,6 +85,19 @@ public class BaseActivity extends ActionBarActivity {
         if (e == null) {
           EventBus.getDefault().post(new UpdateMapMarkers(parseObjects));
         }
+      }
+    });
+  }
+
+  public void onEventMainThread(InvokePushNotifEvent event) {
+    if (event.exception != null) { return; }
+    ParsePush push = new ParsePush();
+    push.setChannel("host-channel");
+    push.setMessage("New fire alert receive!");
+    push.sendInBackground(new SendCallback() {
+      @Override
+      public void done(ParseException e) {
+        LogUtil.e("push notification sent!");
       }
     });
   }

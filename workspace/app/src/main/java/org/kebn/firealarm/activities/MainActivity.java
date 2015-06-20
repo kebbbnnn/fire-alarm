@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.kebn.firealarm.Config;
+import org.kebn.firealarm.FireAlarmApp;
 import org.kebn.firealarm.R;
 
 
@@ -14,9 +16,11 @@ public class MainActivity extends BaseActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
-    //startActivity(new Intent(this, SendAlarmActivity.class));
-    startActivity(new Intent(this, MonitorActivity.class));
+    if (FireAlarmApp.config.getAppType().equals(Config.Type.CLIENT.toString())) {
+      startActivity(new Intent(this, SendAlarmActivity.class));
+    } else if (FireAlarmApp.config.getAppType().equals(Config.Type.HOST.toString())) {
+      startActivity(new Intent(this, MonitorActivity.class));
+    }
     finish();
   }
 

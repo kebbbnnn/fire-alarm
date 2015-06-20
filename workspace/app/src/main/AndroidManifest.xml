@@ -1,48 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.kebn.firealarm" >
+<manifest package="org.kebn.firealarm"
+          xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-feature
-        android:glEsVersion="0x00020000"
-        android:required="true" />
+  <uses-feature
+      android:glEsVersion="0x00020000"
+      android:required="true"/>
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+  <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+  <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+  <uses-permission android:name="android.permission.WAKE_LOCK"/>
+  <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+  <uses-permission android:name="android.permission.VIBRATE"/>
+  <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+  <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
 
-    <application
-        android:name=".FireAlarmApp"
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-        <activity
-            android:name=".activities.MainActivity"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+  <permission android:name="org.kebn.firealarm.permission.C2D_MESSAGE"
+              android:protectionLevel="signature"/>
+  <uses-permission android:name="org.kebn.firealarm.permission.C2D_MESSAGE"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <!-- Google API credentials -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyASiFV_S9aDvl7O2FJTNRtNBD3QHmOl-4E" />
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+  <application
+      android:name=".FireAlarmApp"
+      android:allowBackup="true"
+      android:icon="@mipmap/ic_launcher"
+      android:label="@string/app_name"
+      android:theme="@style/AppTheme">
+    <activity
+        android:name=".activities.MainActivity"
+        android:label="@string/app_name">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
 
-        <activity
-            android:name=".activities.SendAlarmActivity"
-            android:label="@string/title_activity_send_alarm" >
-        </activity>
-        <activity
-            android:name=".activities.MonitorActivity"
-            android:label="@string/title_activity_monitor" >
-        </activity>
-    </application>
+        <category android:name="android.intent.category.LAUNCHER"/>
+      </intent-filter>
+    </activity>
+    <!-- Google API credentials -->
+    <meta-data
+        android:name="com.google.android.geo.API_KEY"
+        android:value="AIzaSyASiFV_S9aDvl7O2FJTNRtNBD3QHmOl-4E"/>
+    <meta-data
+        android:name="com.google.android.gms.version"
+        android:value="@integer/google_play_services_version"/>
+
+    <activity
+        android:name=".activities.SendAlarmActivity"
+        android:label="@string/title_activity_send_alarm">
+    </activity>
+    <activity
+        android:name=".activities.MonitorActivity"
+        android:label="@string/title_activity_monitor">
+    </activity>
+
+    <service android:name="com.parse.PushService"/>
+    <receiver android:name="com.parse.ParseBroadcastReceiver">
+      <intent-filter>
+        <action android:name="android.intent.action.BOOT_COMPLETED"/>
+        <action android:name="android.intent.action.USER_PRESENT"/>
+      </intent-filter>
+    </receiver>
+    <receiver android:name="com.parse.GcmBroadcastReceiver"
+              android:permission="com.google.android.c2dm.permission.SEND">
+      <intent-filter>
+        <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+        <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
+
+        <category android:name="org.kebn.firealarm"/>
+      </intent-filter>
+    </receiver>
+    <receiver android:name="com.parse.ParsePushBroadcastReceiver" android:exported="false">
+      <intent-filter>
+        <action android:name="com.parse.push.intent.RECEIVE"/>
+        <action android:name="com.parse.push.intent.DELETE"/>
+        <action android:name="com.parse.push.intent.OPEN"/>
+      </intent-filter>
+    </receiver>
+
+    <meta-data android:name="com.parse.push.notification_icon"
+               android:resource="@mipmap/fire"/>
+
+  </application>
 
 </manifest>

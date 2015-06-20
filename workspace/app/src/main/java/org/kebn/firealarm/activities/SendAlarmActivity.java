@@ -144,6 +144,7 @@ public class SendAlarmActivity extends BaseActivity {
         });
   }
 
+
   public void onEventMainThread(AlarmSentEvent event) {
     activityButton.setEnabled(false);
     activityButton.setText("Alarm Sent!");
