@@ -1,1 +1,4 @@
 include ':app'
+
+include ':libs:MaterialWidget:library'
+project(':libs:MaterialWidget:library').projectDir = new File('libs/MaterialWidget/library')
