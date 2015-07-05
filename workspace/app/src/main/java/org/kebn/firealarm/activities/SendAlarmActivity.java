@@ -5,9 +5,13 @@ import android.location.Location;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewTreeObserver;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.location.LocationRequest;
+import com.material.widget.CircleButton;
 
 import org.kebn.firealarm.R;
 import org.kebn.firealarm.events.AlarmSentEvent;
@@ -35,15 +39,35 @@ public class SendAlarmActivity extends BaseActivity {
   private StatefullButton activityButton;
   private TextView        addressTextView;
 
+  private CircleButton   fabButton;
+  private RelativeLayout mapContainer;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     EventBus.getDefault().register(this);
-    setContentView(R.layout.activity_send_alarm);
-    activityButton = (StatefullButton) findViewById(R.id.button_send);
-    addressTextView = (TextView) findViewById(R.id.text_address);
+    if (getSupportActionBar() != null) { getSupportActionBar().hide(); }
+    View v = View.inflate(this, R.layout.activity_send_alarm, null);
+    setContentView(v);
+    mapContainer = (RelativeLayout) findViewById(R.id.layout_map_container);
+    fabButton = (CircleButton) findViewById(R.id.circle_button);
+//    activityButton = (StatefullButton) findViewById(R.id.button_send);
+//    addressTextView = (TextView) findViewById(R.id.text_address);
 
-    fetchingLocation();
+//    fetchingLocation();
+    v.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver
+        .OnGlobalLayoutListener() {
+      @Override
+      public void onGlobalLayout() {
+        int mapHeight = mapContainer.getMeasuredHeight();
+        int fabHeight = fabButton.getMeasuredHeight();
+        RelativeLayout.LayoutParams params =
+            (RelativeLayout.LayoutParams) fabButton.getLayoutParams();
+        params.topMargin = mapHeight - (fabHeight / 2);
+        LogUtil.e("margin = " + params.topMargin);
+        fabButton.setLayoutParams(params);
+      }
+    });
   }
 
   @Override
