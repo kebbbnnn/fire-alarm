@@ -16,7 +16,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
       <ImageView
           android:id="@+id/img_plane"
           android:layout_width="25dp"
@@ -28,7 +30,7 @@
           android:id="@+id/text_1"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_centerVertical="true"
+          android:layout_alignParentTop="true"
           android:layout_toRightOf="@id/img_plane"
           android:text="TIP:"
           android:textColor="@android:color/black"
@@ -38,9 +40,9 @@
           android:id="@+id/text_2"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_centerVertical="true"
+          android:layout_alignParentTop="true"
           android:layout_toRightOf="@id/text_1"
-          android:text="You can change location by dragging the marker"
+          android:text="You can change location by dragging the marker or tapping on any location on the map"
           android:textColor="#4a4a4a"
           android:textSize="12sp"/>
     </RelativeLayout>

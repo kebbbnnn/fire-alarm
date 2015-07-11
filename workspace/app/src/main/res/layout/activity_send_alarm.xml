@@ -59,7 +59,7 @@
       xmlns:android="http://schemas.android.com/apk/res/android"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:padding="16dp">
+      android:padding="0dp">
     <org.kebn.firealarm.widget.CardViewPlus
         android:id="@+id/card_reveal"
         style="@style/CardView"
@@ -70,8 +70,25 @@
         app:cardBackgroundColor="#A63737"
         app:cardElevation="2dp"
         app:cardPreventCornerOverlap="false"
-        app:cardUseCompatPadding="true"
-        />
+        app:cardUseCompatPadding="true">
+      <org.kebn.firealarm.views.AutoScaleSquareRelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:background="#d95c5c">
+        <HorizontalScrollView
+            android:id="@+id/horizontalScrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none">
+          <view
+              android:id="@+id/line_view"
+              class="com.dacer.androidcharts.LineView"
+              android:layout_width="wrap_content"
+              android:layout_height="match_parent"
+              android:background="@android:color/white"/>
+        </HorizontalScrollView>
+      </org.kebn.firealarm.views.AutoScaleSquareRelativeLayout>
+    </org.kebn.firealarm.widget.CardViewPlus>
   </io.codetail.widget.RevealFrameLayout>
 
   <com.material.widget.CircleButton

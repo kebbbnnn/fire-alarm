@@ -11,6 +11,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.RelativeLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.dacer.androidcharts.LineView;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -58,6 +59,7 @@ public class SendAlarmActivity extends BaseActivity {
   private RelativeLayout mapContainer;
   private PaperButton    buttonSend;
   private CardViewPlus   cardReveal;
+  private LineView       lineView;
 
   private GoogleMap googleMap;
 
@@ -88,6 +90,7 @@ public class SendAlarmActivity extends BaseActivity {
     changeFabTransform(root);
     getMyLocation();
     initialCardRevealState();
+    lineViewTest();
   }
 
   @Override
@@ -96,6 +99,49 @@ public class SendAlarmActivity extends BaseActivity {
     EventBus.getDefault().unregister(this);
   }
 
+
+  //region line chart test
+  int randomint = 9;
+
+  private void lineViewTest() {
+    //must*
+    ArrayList<String> test = new ArrayList<>();
+    for (int i = 0; i < randomint; i++) {
+      test.add(String.valueOf(i + 1));
+    }
+    lineView.setBottomTextList(test);
+    lineView.setDrawDotLine(true);
+    lineView.setShowPopup(LineView.SHOW_POPUPS_NONE);
+    randomSet(lineView);
+  }
+
+  private void randomSet(LineView lineView) {
+    ArrayList<Integer> dataList = new ArrayList<>();
+    int random = (int) (Math.random() * 9 + 1);
+    for (int i = 0; i < randomint; i++) {
+      dataList.add((int) (Math.random() * random));
+    }
+
+    ArrayList<Integer> dataList2 = new ArrayList<>();
+    random = (int) (Math.random() * 9 + 1);
+    for (int i = 0; i < randomint; i++) {
+      dataList2.add((int) (Math.random() * random));
+    }
+
+    ArrayList<Integer> dataList3 = new ArrayList<>();
+    random = (int) (Math.random() * 9 + 1);
+    for (int i = 0; i < randomint; i++) {
+      dataList3.add((int) (Math.random() * random));
+    }
+
+    ArrayList<ArrayList<Integer>> dataLists = new ArrayList<>();
+    dataLists.add(dataList);
+    dataLists.add(dataList2);
+    //dataLists.add(dataList3);
+
+    lineView.setDataList(dataLists);
+  }
+  //endregion
 
   /**
    * initializes the views of this {@link android.app.Activity}
@@ -106,6 +152,7 @@ public class SendAlarmActivity extends BaseActivity {
     fabButton = (CircleButton) findViewById(R.id.circle_button);
     buttonSend = (PaperButton) findViewById(R.id.button_send);
     cardReveal = (CardViewPlus) findViewById(R.id.card_reveal);
+    lineView = (LineView) findViewById(R.id.line_view);
   }
 
   /**
@@ -120,11 +167,23 @@ public class SendAlarmActivity extends BaseActivity {
    * initial state of {@link org.kebn.firealarm.widget.CardViewPlus}
    */
   private void initialCardRevealState() {
+    //a bit hacky but will find out proper way soon
     mAnimator = defaultReveal();
-    mAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-    mAnimator.setDuration(500);
+    startSupportAnimator(400);
     mAnimator.reverse();
-    mAnimator = null;
+    mAnimator.addListener(animatorListener);
+    startSupportAnimator(400);
+  }
+
+  /**
+   * Plays {@link io.codetail.animation.SupportAnimator}
+   *
+   * @param duration
+   */
+  private void startSupportAnimator(int duration) {
+    mAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
+    mAnimator.setDuration(duration);
+    mAnimator.start();
   }
 
   /**
@@ -166,7 +225,29 @@ public class SendAlarmActivity extends BaseActivity {
   private void cardRevealAnimation() {
     if (mAnimator != null && !mAnimator.isRunning()) {
       mAnimator = mAnimator.reverse();
-      mAnimator.addListener(new SupportAnimator.AnimatorListener() {
+      mAnimator.addListener(animatorListener);
+    } else if (mAnimator != null) {
+      mAnimator.cancel();
+      return;
+    } else {
+      mAnimator = defaultReveal();
+    }
+    startSupportAnimator(400);
+  }
+
+  /**
+   * Gets the hypotenuse
+   *
+   * @param a
+   * @param b
+   * @return
+   */
+  static float hypo(int a, int b) {
+    return (float) Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
+  }
+
+  private SupportAnimator.AnimatorListener animatorListener =
+      new SupportAnimator.AnimatorListener() {
         @Override
         public void onAnimationStart() {
 
@@ -187,23 +268,7 @@ public class SendAlarmActivity extends BaseActivity {
         public void onAnimationRepeat() {
 
         }
-      });
-    } else if (mAnimator != null) {
-      mAnimator.cancel();
-      return;
-    } else {
-      mAnimator = defaultReveal();
-    }
-
-    mAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-    mAnimator.setDuration(500);
-    mAnimator.start();
-  }
-
-  static float hypo(int a, int b) {
-    return (float) Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
-  }
-
+      };
 
   /**
    * changes the transform of {@link com.material.widget.CircleButton}
