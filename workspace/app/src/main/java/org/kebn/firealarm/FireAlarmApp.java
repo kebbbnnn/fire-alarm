@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.parse.Parse;
+import com.parse.ParseCrashReporting;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
 
@@ -21,6 +22,8 @@ public class FireAlarmApp extends Application {
     FireAlarmApp.context = getApplicationContext();
     /**init app type**/
     config = new Config(Config.Type.CLIENT);
+    /** Enable Crash Reporting **/
+    ParseCrashReporting.enable(this);
     /** Initialize Parse or this app**/
     Parse.initialize(this, getString(R.string.applicationId), getString(R.string.clientId));
     /**register device type**/

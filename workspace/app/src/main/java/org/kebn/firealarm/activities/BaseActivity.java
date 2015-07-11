@@ -93,7 +93,7 @@ public class BaseActivity extends ActionBarActivity {
     if (event.exception != null) { return; }
     ParsePush push = new ParsePush();
     push.setChannel("host-channel");
-    push.setMessage("New fire alert receive!");
+    push.setMessage("New fire alert received!");
     push.sendInBackground(new SendCallback() {
       @Override
       public void done(ParseException e) {

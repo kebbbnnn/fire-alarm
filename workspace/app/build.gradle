@@ -19,6 +19,19 @@ android {
   }
 }
 
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+}
+
+repositories {
+  mavenCentral()
+  maven {
+    url "https://jitpack.io"
+  }
+}
+
 dependencies {
   compile project(':libs:MaterialWidget:library')
   compile files("libs/bolts-android-1.2.0.jar");
@@ -30,6 +43,13 @@ dependencies {
   compile 'com.google.android.gms:play-services:7.5.0'
   compile 'pl.charmas.android:android-reactive-location:0.6@aar'
   compile 'io.reactivex:rxjava:1.0.10'
+  compile('de.keyboardsurfer.android.widget:crouton:1.8.5@aar') {
+    // exclusion is not necessary, but generally a good idea.
+    exclude group: 'com.google.android', module: 'support-v4'
+  }
+  compile 'com.github.ozodrukh:CircularReveal:1.1.0'
+  compile 'com.android.support:cardview-v7:21.0.2'
+  compile 'com.afollestad:material-dialogs:0.7.6.0'
 
   //RxAndroid or NotRxAndroid is not required by library
   compile 'io.reactivex:rxandroid:0.24.0'

@@ -1,18 +1,38 @@
 <RelativeLayout
+    android:id="@+id/root_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:widget="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@null">
 
   <org.kebn.firealarm.views.AutoScaleSquareRelativeLayout
       android:id="@+id/layout_map_container"
       android:layout_width="match_parent"
-      android:layout_height="match_parent">
-
-    <fragment android:id="@+id/map"
-              android:name="com.google.android.gms.maps.MapFragment"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"/>
+      android:layout_height="match_parent"
+      android:background="#d95c5c">
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="100dp"
+        card_view:cardBackgroundColor="#ffffff">
+      <fragment android:id="@+id/map"
+                android:name="com.google.android.gms.maps.MapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+      <RelativeLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:scaleType="fitXY"
+            android:src="@drawable/bg_placecam_shade"/>
+      </RelativeLayout>
+    </android.support.v7.widget.CardView>
 
   </org.kebn.firealarm.views.AutoScaleSquareRelativeLayout>
 
@@ -21,13 +41,38 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_below="@id/layout_map_container"
-      android:background="@android:color/white">
+      android:background="#e8e8e8">
+
     <com.material.widget.PaperButton
-        android:layout_width="160dp"
-        android:layout_height="60dp"
+        android:id="@+id/button_send"
+        android:layout_width="180dp"
+        android:layout_height="80dp"
         android:layout_centerInParent="true"
-        widget:paper_text="Send Alarm"/>
+        widget:paper_color="#d95c5c"
+        widget:paper_text="Send Alarm!"
+        widget:paper_text_color="#ffffff"/>
+
   </RelativeLayout>
+
+  <!-- Reveal Layout-->
+  <io.codetail.widget.RevealFrameLayout
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:padding="16dp">
+    <org.kebn.firealarm.widget.CardViewPlus
+        android:id="@+id/card_reveal"
+        style="@style/CardView"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        app:cardBackgroundColor="#A63737"
+        app:cardElevation="2dp"
+        app:cardPreventCornerOverlap="false"
+        app:cardUseCompatPadding="true"
+        />
+  </io.codetail.widget.RevealFrameLayout>
 
   <com.material.widget.CircleButton
       android:id="@+id/circle_button"
@@ -35,30 +80,7 @@
       android:layout_height="wrap_content"
       android:layout_alignParentRight="true"
       android:layout_marginRight="8dp"
+      widget:circle_color="#d95c5c"
       widget:circle_icon="@drawable/ic_add_white_24dp"/>
-
-  <!--<org.kebn.firealarm.views.StatefullButton-->
-  <!--android:id="@+id/button_send"-->
-  <!--style="@style/ButtonGreen"-->
-  <!--android:layout_width="match_parent"-->
-  <!--android:layout_height="100dp"-->
-  <!--android:layout_centerInParent="true"-->
-  <!--android:layout_margin="40dp"-->
-  <!--android:text="Send Alarm!"-->
-  <!--android:textSize="24sp"/>-->
-  <!--<TextView-->
-  <!--android:id="@+id/text_address"-->
-  <!--android:layout_width="wrap_content"-->
-  <!--android:layout_height="wrap_content"-->
-  <!--android:layout_above="@id/button_send"-->
-  <!--android:layout_centerHorizontal="true"-->
-  <!--android:layout_marginBottom="-30dp"-->
-  <!--android:layout_marginLeft="40dp"-->
-  <!--android:layout_marginRight="40dp"-->
-  <!--android:ellipsize="end"-->
-  <!--android:maxLines="1"-->
-  <!--android:singleLine="true"-->
-  <!--android:textSize="14sp"/>-->
-
 
 </RelativeLayout>
