@@ -10,6 +10,8 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/libs" />
+            <option value="$PROJECT_DIR$/libs/AndroidCharts" />
+            <option value="$PROJECT_DIR$/libs/AndroidCharts/AndroidCharts" />
             <option value="$PROJECT_DIR$/libs/MaterialWidget" />
             <option value="$PROJECT_DIR$/libs/MaterialWidget/library" />
           </set>

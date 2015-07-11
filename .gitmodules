@@ -1,3 +1,6 @@
 [submodule "workspace/libs/MaterialWidget"]
 	path = workspace/libs/MaterialWidget
 	url = https://github.com/kebbbnnn/MaterialWidget.git
+[submodule "workspace/libs/AndroidCharts"]
+	path = workspace/libs/AndroidCharts
+	url = https://github.com/kebbbnnn/AndroidCharts.git

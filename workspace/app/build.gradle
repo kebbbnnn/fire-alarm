@@ -34,6 +34,7 @@ repositories {
 
 dependencies {
   compile project(':libs:MaterialWidget:library')
+  compile project(':libs:AndroidCharts:AndroidCharts')
   compile files("libs/bolts-android-1.2.0.jar");
   compile files("libs/bolts-android-1.2.0-javadoc.jar");
   compile files("libs/Parse-1.9.2.jar")
