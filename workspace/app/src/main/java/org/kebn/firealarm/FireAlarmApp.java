@@ -8,6 +8,8 @@ import com.parse.ParseCrashReporting;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
 
+import org.kebn.firealarm.utils.LogUtil;
+
 /**
  * Created by Kevin on 6/12/2015.
  */
@@ -40,6 +42,7 @@ public class FireAlarmApp extends Application {
   }
 
   private void registerDevice() {
+    LogUtil.e("Point A");
     ParseInstallation.getCurrentInstallation().saveInBackground();
     ParsePush.subscribeInBackground(config.getAppType().equals(Config.Type.HOST.toString())
         ? "host-channel" : "client-channel");

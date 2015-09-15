@@ -11,7 +11,6 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.RelativeLayout;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.dacer.androidcharts.LineView;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -23,18 +22,27 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.material.widget.CircleButton;
 import com.material.widget.PaperButton;
+import com.parse.ParseObject;
 
+import org.eazegraph.lib.charts.ValueLineChart;
+import org.eazegraph.lib.models.ValueLinePoint;
+import org.eazegraph.lib.models.ValueLineSeries;
 import org.kebn.firealarm.R;
 import org.kebn.firealarm.events.AlarmSentEvent;
+import org.kebn.firealarm.events.ProcessAlarmForGraphEvent;
+import org.kebn.firealarm.events.RequestAlarmEvent;
 import org.kebn.firealarm.events.SendAlarmEvent;
 import org.kebn.firealarm.handlers.ErrorHandler;
 import org.kebn.firealarm.utils.AddressUtil;
 import org.kebn.firealarm.utils.GetGeoAddressAsync;
 import org.kebn.firealarm.utils.MarkerUtil;
 import org.kebn.firealarm.widget.CardViewPlus;
+import org.kebn.firealarm.widget.WhatToDoDialog;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NavigableMap;
+import java.util.TreeMap;
 
 import de.greenrobot.event.EventBus;
 import de.keyboardsurfer.android.widget.crouton.Configuration;
@@ -51,6 +59,8 @@ import rx.schedulers.Schedulers;
 
 public class SendAlarmActivity extends BaseActivity {
 
+  private static final List<String> months;
+
   private Subscription updatableLocationSubscription;
   private Location     currentLocation;
   private Address      currentAddress;
@@ -59,7 +69,8 @@ public class SendAlarmActivity extends BaseActivity {
   private RelativeLayout mapContainer;
   private PaperButton    buttonSend;
   private CardViewPlus   cardReveal;
-  private LineView       lineView;
+  // private LineView       lineView;
+  private ValueLineChart mCubicValueLineChart;
 
   private GoogleMap googleMap;
 
@@ -75,6 +86,19 @@ public class SendAlarmActivity extends BaseActivity {
     INFO = new Style.Builder().setBackgroundColorValue(0xff6dad69).build();
     ALERT = new Style.Builder().setBackgroundColorValue(0xffb6003b).build();
     CONFIRM = new Style.Builder().setBackgroundColorValue(0xff1a4b73).build();
+    months = new ArrayList<>();
+    months.add("Jan");
+    months.add("Feb");
+    months.add("Mar");
+    months.add("Apr");
+    months.add("May");
+    months.add("Jun");
+    months.add("Jul");
+    months.add("Aug");
+    months.add("Sep");
+    months.add("Oct");
+    months.add("Nov");
+    months.add("Dec");
   }
 
   @Override
@@ -91,6 +115,7 @@ public class SendAlarmActivity extends BaseActivity {
     getMyLocation();
     initialCardRevealState();
     lineViewTest();
+    EventBus.getDefault().post(new RequestAlarmEvent());
   }
 
   @Override
@@ -101,45 +126,8 @@ public class SendAlarmActivity extends BaseActivity {
 
 
   //region line chart test
-  int randomint = 9;
-
   private void lineViewTest() {
-    //must*
-    ArrayList<String> test = new ArrayList<>();
-    for (int i = 0; i < randomint; i++) {
-      test.add(String.valueOf(i + 1));
-    }
-    lineView.setBottomTextList(test);
-    lineView.setDrawDotLine(true);
-    lineView.setShowPopup(LineView.SHOW_POPUPS_NONE);
-    randomSet(lineView);
-  }
 
-  private void randomSet(LineView lineView) {
-    ArrayList<Integer> dataList = new ArrayList<>();
-    int random = (int) (Math.random() * 9 + 1);
-    for (int i = 0; i < randomint; i++) {
-      dataList.add((int) (Math.random() * random));
-    }
-
-    ArrayList<Integer> dataList2 = new ArrayList<>();
-    random = (int) (Math.random() * 9 + 1);
-    for (int i = 0; i < randomint; i++) {
-      dataList2.add((int) (Math.random() * random));
-    }
-
-    ArrayList<Integer> dataList3 = new ArrayList<>();
-    random = (int) (Math.random() * 9 + 1);
-    for (int i = 0; i < randomint; i++) {
-      dataList3.add((int) (Math.random() * random));
-    }
-
-    ArrayList<ArrayList<Integer>> dataLists = new ArrayList<>();
-    dataLists.add(dataList);
-    dataLists.add(dataList2);
-    //dataLists.add(dataList3);
-
-    lineView.setDataList(dataLists);
   }
   //endregion
 
@@ -152,7 +140,8 @@ public class SendAlarmActivity extends BaseActivity {
     fabButton = (CircleButton) findViewById(R.id.circle_button);
     buttonSend = (PaperButton) findViewById(R.id.button_send);
     cardReveal = (CardViewPlus) findViewById(R.id.card_reveal);
-    lineView = (LineView) findViewById(R.id.line_view);
+    //lineView = (LineView) findViewById(R.id.line_view);
+    mCubicValueLineChart = (ValueLineChart) findViewById(R.id.cubiclinechart);
   }
 
   /**
@@ -358,7 +347,7 @@ public class SendAlarmActivity extends BaseActivity {
           @Override
           public void onMapClick(LatLng latLng) {
             googleMap.clear();
-            updateCamToLocation(latLng);
+            updateCamToLocation(latLng);//updates map camera
             updateCurrentLocation(latLng);
             addMarker(latLng);
           }
@@ -425,7 +414,7 @@ public class SendAlarmActivity extends BaseActivity {
    */
   private void addMarker(LatLng latLng) {
     if (googleMap != null) {
-      Bitmap pin = MarkerUtil.scaleImage(getResources(), R.drawable.flat_pin, 80);
+      Bitmap pin = MarkerUtil.scaleImage(getResources(), R.drawable.fire_pin, 100);
       googleMap.addMarker(
           new MarkerOptions()
               .position(latLng)
@@ -502,7 +491,65 @@ public class SendAlarmActivity extends BaseActivity {
           public void onPositive(MaterialDialog dialog) {
             super.onPositive(dialog);
           }
+
+          @Override
+          public void onAny(MaterialDialog dialog) {
+            super.onAny(dialog);
+            WhatToDoDialog.create(false, getResources().getColor(R.color.green)).show(
+                getSupportFragmentManager(), "whattodo");
+          }
         }).show();
+  }
+
+  public void onEventAsync(ProcessAlarmForGraphEvent event) {
+    NavigableMap<Integer, List<ParseObject>> navigableMap = new TreeMap<>();
+    for (ParseObject obj : event.parseObjects) {
+      List<ParseObject> yearList = navigableMap.get(obj.getCreatedAt().getMonth());
+      if (yearList == null) {
+        navigableMap.put(obj.getCreatedAt().getMonth(), yearList = new ArrayList<>());
+      }
+      yearList.add(obj);
+    }
+    int max = 0;
+    for (int i = 0; i < 11; i++) {
+      if (navigableMap.get(i) != null && navigableMap.get(i).size() > max) {
+        max = navigableMap.get(i).size();
+      }
+    }
+    ValueLineSeries series = new ValueLineSeries();
+    series.setColor(0xFF56B7F1);
+    series.addPoint(new ValueLinePoint("Jan", navigableMap.get(0) != null ? navigableMap.get(0)
+        .size() / max : 0));
+    series.addPoint(new ValueLinePoint("Feb", navigableMap.get(1) != null ? navigableMap.get(1)
+        .size() / max : 0));
+    series.addPoint(new ValueLinePoint("Mar", navigableMap.get(2) != null ? navigableMap.get(2)
+        .size() / max : 0));
+    series.addPoint(new ValueLinePoint("Apr", navigableMap.get(3) != null ? navigableMap.get(3)
+        .size() / max : 0));
+    series.addPoint(new ValueLinePoint("May", navigableMap.get(4) != null ? navigableMap.get(4)
+        .size() / max : 0));
+    series.addPoint(new ValueLinePoint("Jun", navigableMap.get(5) != null ? navigableMap.get(5)
+        .size() / max : 0));
+    series.addPoint(new ValueLinePoint("Jul", navigableMap.get(6) != null ? navigableMap.get(6)
+        .size() / max : 0));
+    series.addPoint(new ValueLinePoint("Aug", navigableMap.get(7) != null ? navigableMap.get(7)
+        .size() / max : 0));
+    series.addPoint(new ValueLinePoint("Sep", navigableMap.get(8) != null ? navigableMap.get(8)
+        .size() / max : 0));
+    series.addPoint(new ValueLinePoint("Oct", navigableMap.get(9) != null ? navigableMap.get(9)
+        .size() / max : 0));
+    series.addPoint(new ValueLinePoint("Nov", navigableMap.get(10) != null ? navigableMap.get(10)
+        .size() / max : 0));
+    series.addPoint(new ValueLinePoint("Dec", navigableMap.get(11) != null ? navigableMap.get(11)
+        .size() / max : 0));
+
+    mCubicValueLineChart.addSeries(series);
+    mCubicValueLineChart.post(new Runnable() {
+      @Override
+      public void run() {
+        mCubicValueLineChart.startAnimation();
+      }
+    });
   }
 
   private View.OnClickListener clickListener = new View.OnClickListener() {

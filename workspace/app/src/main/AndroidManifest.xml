@@ -23,6 +23,7 @@
               android:protectionLevel="signature"/>
   <uses-permission android:name="org.kebn.firealarm.permission.C2D_MESSAGE"/>
 
+
   <application
       android:name=".FireAlarmApp"
       android:allowBackup="true"
@@ -82,6 +83,9 @@
 
     <meta-data android:name="com.parse.push.notification_icon"
                android:resource="@mipmap/fire"/>
+
+    <!--<meta-data android:name="com.parse.push.gcm_sender_id"-->
+    <!--android:value="id:720331477725"/>-->
 
   </application>
 

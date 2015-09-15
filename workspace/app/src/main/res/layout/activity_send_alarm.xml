@@ -74,19 +74,20 @@
       <org.kebn.firealarm.views.AutoScaleSquareRelativeLayout
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          android:background="#d95c5c">
-        <HorizontalScrollView
-            android:id="@+id/horizontalScrollView"
+          android:background="@android:color/white">
+        <org.eazegraph.lib.charts.ValueLineChart
+            android:id="@+id/cubiclinechart"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="none">
-          <view
-              android:id="@+id/line_view"
-              class="com.dacer.androidcharts.LineView"
-              android:layout_width="wrap_content"
-              android:layout_height="match_parent"
-              android:background="@android:color/white"/>
-        </HorizontalScrollView>
+            app:egCurveSmoothness="0.25"
+            app:egIndicatorLineColor="#FE6DA8"
+            app:egIndicatorTextColor="#FE6DA8"
+            app:egIndicatorTextUnit="g"
+            app:egLegendHeight="40dp"
+            app:egShowLegendBeneathIndicator="true"
+            app:egShowStandardValue="true"
+            app:egUseCubic="true"
+            app:egUseOverlapFill="true"/>
       </org.kebn.firealarm.views.AutoScaleSquareRelativeLayout>
     </org.kebn.firealarm.widget.CardViewPlus>
   </io.codetail.widget.RevealFrameLayout>

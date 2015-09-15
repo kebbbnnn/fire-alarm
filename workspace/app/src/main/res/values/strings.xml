@@ -7,5 +7,8 @@
   <!-- Parse credentials-->
   <string name="applicationId">f5tsasRPBM0hMIjSCcYk9nx1IMVfmeixO2Py7gec</string>
   <string name="clientId">FVXeaKIGk0IQChV4F1mWFoK50asQJjvfGux8AsNO</string>
+  <!--<string name="applicationId">BhD17qoa5U90P5CiRYttuft57fIsfsNTTcPEIM10</string>-->
+  <!--<string name="clientId">VjNvYLk6nSjy18Q2r56BNwuP8NoLMTNY7fVE2TIq</string>-->
   <string name="title_activity_monitor">MonitorActivity</string>
+  <string name="what_to_do">What To Do in Case of a Fire</string>
 </resources>
